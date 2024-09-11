@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Pylint on the whole project
         run: |
-          pylint ./**/*.py --ignore=README.md
+          pylint ./**/*.py
 
       - name: Analysing the code with pylint
         run: |
