@@ -1,4 +1,4 @@
-git # 🍲 Recipe_Master
+# 🍲 Recipe_Master
 
 ¡Bienvenido a **Recipe_Master**! Esta aplicación te ayuda a organizar tus recetas de cocina, planificar menús, generar listas de compras y sugerir recetas basadas en los ingredientes disponibles.
 
