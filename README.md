@@ -4,32 +4,35 @@
 
 ## 🚀 Requisitos previos
 
-1. 🐍 **Python 3.x**
+1. 🐍 **Python 3.12**
 2. 🐳 **Docker**
 3. 🛠️ **Docker Compose**
 
 ### 🐍 Instalación de Python en Linux
 
-1. Verifica si tienes Python instalado ejecutando:
+1. Verifica si tienes Python 3.12 instalado ejecutando:
 
     ```bash
     python3 --version
     ```
 
-2. Si no está instalado, puedes instalarlo con:
+2. Si no está instalado, puedes instalarlo desde la página oficial de Python o utilizando un gestor de paquetes como apt (la disponibilidad de Python 3.12 en apt depende de tu distribución de Linux):
 
     ```bash
+    # Ejemplo con apt (puede variar según la distribución)
     sudo apt update
-    sudo apt install python3 python3-venv python3-pip
+    sudo apt install python3.12 python3.12-venv python3.12-pip
     ```
+
+    **Nota:** Ajusta los comandos según tu distribución de Linux y la forma en que se proporciona Python 3.12.
 
 ### 🌐 Creación del entorno virtual
 
 1. Navega a la carpeta raíz del proyecto en tu terminal.
-2. Crea un entorno virtual ejecutando:
+2. Crea un entorno virtual ejecutando (recuerda usar python3.12):
 
     ```bash
-    python3 -m venv venv
+    python3.12 -m venv venv
     ```
 
 3. **Activar el entorno virtual**:
@@ -131,5 +134,3 @@
     ```bash
     python main.py
     ```
-
-### 👥 Contribuciones
