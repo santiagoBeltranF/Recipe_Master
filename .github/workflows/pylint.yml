@@ -23,8 +23,9 @@ jobs:
 
       - name: Install dependencies from requirements.txt
         run: |
+          source venv/bin/activate
           python -m pip install --upgrade pip
-          pip install -r ${{ github.workspace }}/FastAPI/requirements.txt
+          pip install -r ${{ github.workspace }}/recipe_master/FastAPI/requirements.txt
 
       - name: Run Pylint on the whole project
         run: |
