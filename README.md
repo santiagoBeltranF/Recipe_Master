@@ -1,135 +1,135 @@
 # 🍲 Recipe_Master
 
-¡Bienvenido a **Recipe_Master**! Esta aplicación te ayuda a organizar tus recetas de cocina, planificar menús, generar listas de compras y sugerir recetas basadas en los ingredientes disponibles.
+Welcome to **Recipe_Master**! This application helps you organize your cooking recipes, plan menus, generate shopping lists, and suggest recipes based on available ingredients.
 
-## 🚀 Requisitos previos
+## 🚀 Prerequisites
 
 1. 🐍 **Python 3.12**
 2. 🐳 **Docker**
 3. 🛠️ **Docker Compose**
 
-### 🐍 Instalación de Python en Linux
+### 🐍 Installing Python on Linux
 
-1. Verifica si tienes Python 3.12 instalado ejecutando:
+1. Check if you have Python 3.12 installed by running:
 
     ```bash
     python3 --version
     ```
 
-2. Si no está instalado, puedes instalarlo desde la página oficial de Python o utilizando un gestor de paquetes como apt (la disponibilidad de Python 3.12 en apt depende de tu distribución de Linux):
+2. If it's not installed, you can install it from the official Python website or by using a package manager like apt (the availability of Python 3.12 in apt depends on your Linux distribution):
 
     ```bash
-    # Ejemplo con apt (puede variar según la distribución)
+    # Example with apt (may vary depending on the distribution)
     sudo apt update
     sudo apt install python3.12 python3.12-venv python3.12-pip
     ```
 
-    **Nota:** Ajusta los comandos según tu distribución de Linux y la forma en que se proporciona Python 3.12.
+    **Note:** Adjust the commands according to your Linux distribution and the way Python 3.12 is provided.
 
-### 🌐 Creación del entorno virtual
+### 🌐 Creating the Virtual Environment
 
-1. Navega a la carpeta raíz del proyecto en tu terminal.
-2. Crea un entorno virtual ejecutando (recuerda usar python3.12):
+1. Navigate to the project's root folder in your terminal.
+2. Create a virtual environment by running (remember to use python3.12):
 
     ```bash
     python3.12 -m venv venv
     ```
 
-3. **Activar el entorno virtual**:
+3. **Activating the virtual environment**:
 
     ```bash
     source venv/bin/activate
     ```
 
-4. **Desactivar el entorno virtual**:
+4. **Deactivating the virtual environment**:
 
     ```bash
     deactivate
     ```
 
-### 🐳 Instalación de Docker en Linux
+### 🐳 Installing Docker on Linux
 
-1. Actualiza los paquetes existentes:
+1. Update existing packages:
 
     ```bash
     sudo apt update
     sudo apt install apt-transport-https ca-certificates curl software-properties-common
     ```
 
-2. Añade la clave GPG de Docker:
+2. Add Docker's GPG key:
 
     ```bash
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
     ```
 
-3. Añade el repositorio de Docker:
+3. Add the Docker repository:
 
     ```bash
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     ```
 
-4. Instala Docker:
+4. Install Docker:
 
     ```bash
     sudo apt update
     sudo apt install docker-ce docker-ce-cli containerd.io
     ```
 
-5. Verifica la instalación:
+5. Verify the installation:
 
     ```bash
     docker --version
     ```
 
-6. Añade tu usuario al grupo Docker:
+6. Add your user to the Docker group:
 
     ```bash
     sudo usermod -aG docker ${USER}
     ```
 
-### ⚙️ Instalación de Docker Compose en Linux
+### ⚙️ Installing Docker Compose on Linux
 
-1. Descarga Docker Compose:
+1. Download Docker Compose:
 
     ```bash
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     ```
 
-2. Otorga permisos de ejecución:
+2. Grant execution permissions:
 
     ```bash
     sudo chmod +x /usr/local/bin/docker-compose
     ```
 
-3. Verifica la instalación:
+3. Verify the installation:
 
     ```bash
     docker-compose --version
     ```
 
-### 🏗️ Ejecución de Docker
+### 🏗️ Running Docker
 
-1. Para correr los contenedores Docker:
+1. To run the Docker containers:
 
     ```bash
     docker-compose up --build
     ```
 
-2. Para detener los contenedores:
+2. To stop the containers:
 
     ```bash
     docker-compose down
     ```
 
-### ▶️ Ejecutar la aplicación
+### ▶️ Running the Application
 
-1. **Instalar dependencias**:
+1. **Install dependencies**:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-2. **Correr la aplicación**:
+2. **Run the application**:
 
     ```bash
     python main.py
