@@ -239,10 +239,13 @@ class ShoppingListModel(Model):
 
 # pylint: disable=too-few-public-methods
 class ShoppingListIngredientModel(Model):
-    """Represents the association between a shopping list and an ingredient with attributes such as shopping list, ingredient, quantity, and purchased status."""
+    """Represents the association between a shopping list and an ingredient with 
+    attributes such as shopping list, ingredient, quantity, and purchased status."""
 
-    shopping_list_id = ForeignKeyField(ShoppingListModel, backref='shopping_list_ingredients', on_delete='CASCADE')
-    ingredient_id = ForeignKeyField(IngredientModel, backref='shopping_list_ingredients', on_delete='CASCADE')
+    shopping_list_id = ForeignKeyField(ShoppingListModel,
+    backref='shopping_list_ingredients', on_delete='CASCADE')
+    ingredient_id = ForeignKeyField(IngredientModel, backref='shopping_list_ingredients',
+    on_delete='CASCADE')
     quantity = FloatField()  # Para manejar cantidades decimales
     purchased = BooleanField(default=False)  # Estado de compra del ingrediente
 
@@ -266,10 +269,13 @@ class SuggestRecipeModel(Model):
 
 # pylint: disable=too-few-public-methods
 class SuggestionRecipeIngredientModel(Model):
-    """Represents the association between a suggestion recipe and an ingredient with attributes such as suggestion recipe, ingredient, and missing status."""
+    """Represents the association between a suggestion recipe and 
+    an ingredient with attributes such as suggestion recipe, ingredient, and missing status."""
 
-    suggestion_recipe_id = ForeignKeyField(SuggestRecipeModel, backref='suggestion_recipe_ingredients', on_delete='CASCADE')
-    ingredient_id = ForeignKeyField(IngredientModel, backref='suggestion_recipe_ingredients', on_delete='CASCADE')
+    suggestion_recipe_id = ForeignKeyField(SuggestRecipeModel,
+    backref='suggestion_recipe_ingredients',on_delete='CASCADE')
+    ingredient_id = ForeignKeyField(IngredientModel,
+    backref='suggestion_recipe_ingredients', on_delete='CASCADE')
     missing = BooleanField(default=False)  # Indica si el ingrediente está faltando
 
     class Meta:
