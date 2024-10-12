@@ -4,7 +4,7 @@ using Peewee ORM and environment variables.
 """
 
 from dotenv import load_dotenv
-from .settings import DATABASE
+from config.settings import DATABASE
 from peewee import (
     MySQLDatabase, Model, AutoField, CharField, ForeignKeyField,
     DateField, TextField, IntegerField, FloatField, BooleanField

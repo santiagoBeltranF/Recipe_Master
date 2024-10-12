@@ -13,8 +13,8 @@ Available Routers:
     - roles_router: Router for role-related routes.
 """
 
-from .user_routes import router as users_router
-from .role_routes import router as roles_router
+from routes.user_routes import router as users_router
+from routes.role_routes import router as roles_router
 
 # Define what routers will be available for public import
 __all__ = [
