@@ -1,3 +1,0 @@
-pylint-activate:
-	@black main.py
-	@pylint main.py

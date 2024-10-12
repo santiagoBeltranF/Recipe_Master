@@ -43,5 +43,5 @@ async def lifespan(app: FastAPI):
 # la conexión a la base de datos
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(role_routes)
-app.include_router(user_routes)
+app.include_router(role_routes.router)
+app.include_router(user_routes.router)

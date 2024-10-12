@@ -9,7 +9,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
-from settings import DATABASE
+from config.settings import DATABASE
 
 Base = declarative_base()
 
