@@ -5,11 +5,11 @@ This module contains the SQLAlchemy models for User and Role,
 defining their attributes and relationships.
 """
 
-from sqlalchemy import Column, Integer, String, ForeignKey # pylint: disable=import-error
-from sqlalchemy.ext.declarative import declarative_base # pylint: disable=import-error
-from sqlalchemy.orm import relationship, sessionmaker # pylint: disable=import-error
-from sqlalchemy import create_engine # pylint: disable=import-error
-from config.settings import DATABASE # pylint: disable=import-error
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy import create_engine
+from settings import DATABASE
 
 Base = declarative_base()
 
