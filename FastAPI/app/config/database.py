@@ -3,8 +3,8 @@ This module establishes a connection to a MySQL database
 using Peewee ORM and environment variables.
 """
 
-import os
 from dotenv import load_dotenv
+from settings import DATABASE
 from peewee import (
     MySQLDatabase, Model, AutoField, CharField, ForeignKeyField,
     DateField, TextField, IntegerField, FloatField, BooleanField
@@ -15,13 +15,12 @@ from peewee import (
 load_dotenv()
 
 # Create a MySQL database instance using environment variables
-DATABASE = MySQLDatabase(
-    os.getenv("MYSQL_DATABASE"),
-    user=os.getenv("MYSQL_USER"),
-    password=os.getenv("MYSQL_PASSWORD"),
-    host=os.getenv("MYSQL_HOST"),
-    port=int(os.getenv("MYSQL_PORT")),
-
+database = MySQLDatabase(
+    DATABASE["name"],
+    user=DATABASE["user"],
+    passwd=DATABASE["password"],
+    host=DATABASE["host"],
+    port=DATABASE["port"],
 )
 
 # pylint: disable=too-few-public-methods

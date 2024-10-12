@@ -1,64 +1,51 @@
+# app/services/user_service.py
+
 """
 Service layer for User operations.
 
 This module contains the business logic for managing users.
-It interacts with the UserModel and RoleModel from the database
-and uses the Pydantic User models for data validation.
+It interacts with the `UserModel` from the database and uses
+the `User` Pydantic model for data validation.
 """
 
 from typing import Optional
-from app.database import UserModel, RoleModel  # pylint: disable=import-error
-from app.models.user import UserResponse  # pylint: disable=import-error
 from peewee import DoesNotExist
+from config.database import UserModel, RoleModel
+from models.user import User
 
 
 class UserService:
-    """Service layer for User operations."""
-
-    ALLOWED_ROLES = {"ADMINISTRATOR", "MEMBER"}
+    """Service layer for User operations"""
 
     @staticmethod
-    def create_user(name: str, email: str, password: str, role_id: int) -> UserResponse:
+    def create_user(name: str, email: str, password: str, role_id: int) -> User:
         """
         Create a new user.
 
         Args:
             name (str): The name of the user.
-            email (str): The email address of the user.
+            email (str): The email of the user.
             password (str): The password of the user.
-            role_id (int): The ID of the role assigned to the user.
+            role_id (int): The ID of the assigned role.
 
         Returns:
-            UserResponse: The created user as a Pydantic model.
+            User: The created user instance.
 
         Raises:
-            ValueError: If the role is invalid or the email already exists.
+            ValueError: If the role with the given ID does not exist.
         """
         try:
-            role = RoleModel.get_by_id(role_id)
-            if role.name not in UserService.ALLOWED_ROLES:
-                raise ValueError(f"Role '{role.name}' is not allowed.")
+            role_instance = RoleModel.get_by_id(role_id)
+            user_instance = UserModel.create(
+                name=name, email=email, password=password, role=role_instance
+            )
+            # Using from_orm to convert Peewee model to Pydantic model
+            return User.from_orm(user_instance)
         except DoesNotExist as exc:
-            raise ValueError("Role not found.") from exc
-
-        # Check if the email already exists
-        if UserModel.select().where(UserModel.email == email).exists():
-            raise ValueError("Email is already in use.")
-
-        # Create the user
-        user_instance = UserModel.create(
-            name=name, email=email, password=password, role=role
-        )
-
-        return UserResponse(
-            id=user_instance.id,
-            name=user_instance.name,
-            email=user_instance.email,
-            role={"id": role.id, "name": role.name},
-        )
+            raise ValueError(f"Role with id {role_id} not found") from exc
 
     @staticmethod
-    def get_user_by_id(user_id: int) -> Optional[UserResponse]:
+    def get_user_by_id(user_id: int) -> Optional[User]:
         """
         Retrieve a user by ID.
 
@@ -66,17 +53,12 @@ class UserService:
             user_id (int): The ID of the user to retrieve.
 
         Returns:
-            Optional[UserResponse]: The user as a Pydantic model if found, else None.
+            Optional[User]: The user instance if found, else None.
         """
         try:
             user_instance = UserModel.get_by_id(user_id)
-            role = user_instance.role
-            return UserResponse(
-                id=user_instance.id,
-                name=user_instance.name,
-                email=user_instance.email,
-                role={"id": role.id, "name": role.name},
-            )
+            # Using from_orm to convert Peewee model to Pydantic model
+            return User.from_orm(user_instance)
         except DoesNotExist:
             return None
 
@@ -87,7 +69,7 @@ class UserService:
         email: Optional[str] = None,
         password: Optional[str] = None,
         role_id: Optional[int] = None,
-    ) -> Optional[UserResponse]:
+    ) -> Optional[User]:
         """
         Update an existing user by ID.
 
@@ -96,48 +78,36 @@ class UserService:
             name (Optional[str]): The new name of the user.
             email (Optional[str]): The new email of the user.
             password (Optional[str]): The new password of the user.
-            role_id (Optional[int]): The new role ID of the user.
+            role_id (Optional[int]): The new role's ID.
 
         Returns:
-            Optional[UserResponse]: The updated user as a Pydantic model if successful, else None.
+            Optional[User]: The updated user instance if successful, else None.
 
         Raises:
-            ValueError: If the role is invalid or the email is already in use.
+            ValueError: If the role with the given ID does not exist.
         """
         try:
             user_instance = UserModel.get_by_id(user_id)
+
+            # Update fields only if new values are provided
+            if name:
+                user_instance.name = name
+            if email:
+                user_instance.email = email
+            if password:
+                user_instance.password = password
+            if role_id:
+                try:
+                    role_instance = RoleModel.get_by_id(role_id)
+                    user_instance.role = role_instance
+                except DoesNotExist as exc:
+                    raise ValueError(f"Role with id {role_id} not found") from exc
+
+            user_instance.save()
+            return User.from_orm(user_instance)
+
         except DoesNotExist:
             return None
-
-        if email and email != user_instance.email:
-            # Check if the new email is already in use
-            if UserModel.select().where(UserModel.email == email).exists():
-                raise ValueError("Email is already in use.")
-            user_instance.email = email
-
-        if name:
-            user_instance.name = name
-
-        if password:
-            user_instance.password = password
-
-        if role_id:
-            try:
-                role = RoleModel.get_by_id(role_id)
-                if role.name not in UserService.ALLOWED_ROLES:
-                    raise ValueError(f"Role '{role.name}' is not allowed.")
-                user_instance.role = role
-            except DoesNotExist as exc:
-                raise ValueError("Role not found.") from exc
-
-        user_instance.save()
-
-        return UserResponse(
-            id=user_instance.id,
-            name=user_instance.name,
-            email=user_instance.email,
-            role={"id": user_instance.role.id, "name": user_instance.role.name},
-        )
 
     @staticmethod
     def delete_user(user_id: int) -> bool:
@@ -151,6 +121,7 @@ class UserService:
             bool: True if the user was deleted, else False.
         """
         try:
+            # Check if the user exists before attempting to delete
             user_instance = UserModel.get_by_id(user_id)
             user_instance.delete_instance()
             return True

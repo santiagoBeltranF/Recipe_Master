@@ -1,45 +1,53 @@
-"""
-Module defining the routes for managing users.
+# app/user_routes.py
 
-This module uses FastAPI to define CRUD routes for users,
-allowing the creation, retrieval, updating, and deletion of users via a REST API.
+"""
+Module that defines the routes for managing users.
+
+This module uses FastAPI to define the routes that allow
+creating, reading, updating, and deleting users through a REST API.
+
+Available routes:
+
+- POST /users/: Creates a new user.
+- GET /users/{user_id}: Retrieves user information by ID.
+- PUT /users/{user_id}: Updates user information.
+- DELETE /users/{user_id}: Deletes a user.
+
+Each route uses the `UserService` to interact with the
+business logic related to users.
 """
 
+from services.user_service import UserService
+from models.user import User
 from fastapi import APIRouter, HTTPException
-from app.services.user_service import UserService # pylint: disable=import-error
-from app.models.user import UserResponse, UserCreate, UserUpdate # pylint: disable=import-error
-
-router = APIRouter()
 
 
-@router.post("/users/", response_model=UserResponse, status_code=201)
-def create_user(user: UserCreate) -> UserResponse:
+router = APIRouter(
+    prefix="/users",
+    tags=["users"],
+)
+
+
+@router.post("/", response_model=User)
+def create_user(name: str, email: str, password: str, role_id: int) -> User:
     """
     Create a new user.
 
     Args:
-        user (UserCreate): The user data to create.
+        name (str): The name of the user.
+        email (str): The email of the user.
+        password (str): The password of the user.
+        role_id (int): The ID of the assigned role.
 
     Returns:
-        UserResponse: The created user.
-
-    Raises:
-        HTTPException: If the role is invalid or the email is already in use.
+        User: The created user instance.
     """
-    try:
-        created_user = UserService.create_user(
-            name=user.name,
-            email=user.email,
-            password=user.password,
-            role_id=user.role_id,
-        )
-        return created_user
-    except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve)) from ve
+    user = UserService.create_user(name, email, password, role_id)
+    return user
 
 
-@router.get("/users/{user_id}", response_model=UserResponse)
-def get_user(user_id: int) -> UserResponse:
+@router.get("/{user_id}", response_model=User)
+def get_user(user_id: int) -> User:
     """
     Retrieve user information by ID.
 
@@ -47,7 +55,7 @@ def get_user(user_id: int) -> UserResponse:
         user_id (int): The ID of the user to retrieve.
 
     Returns:
-        UserResponse: The user with the specified ID.
+        User: The user with the specified ID.
 
     Raises:
         HTTPException: If the user is not found.
@@ -58,37 +66,33 @@ def get_user(user_id: int) -> UserResponse:
     raise HTTPException(status_code=404, detail="User not found")
 
 
-@router.put("/users/{user_id}", response_model=UserResponse)
-def update_user(user_id: int, user: UserUpdate) -> UserResponse:
+@router.put("/{user_id}", response_model=User)
+def update_user(
+    user_id: int, name: str = None, email: str = None, password: str = None, role_id: int = None
+) -> User:
     """
     Update user information.
 
     Args:
         user_id (int): The ID of the user to update.
-        user (UserUpdate): The new user data.
+        name (str, optional): The new name of the user.
+        email (str, optional): The new email of the user.
+        password (str, optional): The new password of the user.
+        role_id (int, optional): The new role's ID.
 
     Returns:
-        UserResponse: The updated user.
+        User: The updated user instance.
 
     Raises:
-        HTTPException: If the user is not found or the role/email is invalid.
+        HTTPException: If the user is not found.
     """
-    try:
-        updated_user = UserService.update_user(
-            user_id=user_id,
-            name=user.name,
-            email=user.email,
-            password=user.password,
-            role_id=user.role_id,
-        )
-        if updated_user:
-            return updated_user
-        raise HTTPException(status_code=404, detail="User not found")
-    except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve)) from ve
+    user = UserService.update_user(user_id, name, email, password, role_id)
+    if user:
+        return user
+    raise HTTPException(status_code=404, detail="User not found")
 
 
-@router.delete("/users/{user_id}", status_code=200)
+@router.delete("/{user_id}")
 def delete_user(user_id: int) -> dict:
     """
     Delete a user by ID.
@@ -97,7 +101,7 @@ def delete_user(user_id: int) -> dict:
         user_id (int): The ID of the user to delete.
 
     Returns:
-        dict: Confirmation message if the user was deleted.
+        dict: A confirmation message if the user was deleted.
 
     Raises:
         HTTPException: If the user is not found.
