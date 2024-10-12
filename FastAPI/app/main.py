@@ -14,6 +14,7 @@ from fastapi import FastAPI
 
 
 @asynccontextmanager
+# pylint: disable=unused-argument, redefined-outer-name
 async def lifespan(app: FastAPI):
     """
     Lifespan context manager for handling database connections.
