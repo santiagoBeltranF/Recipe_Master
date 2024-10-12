@@ -13,7 +13,7 @@ from settings import DATABASE
 
 Base = declarative_base()
 
-class Role(Base):
+class Role(Base): # pylint: disable=too-few-public-methods
     """
     Model representing a role in the system.
 
@@ -28,7 +28,7 @@ class Role(Base):
     users = relationship("User", back_populates="role")
 
 
-class User(Base):
+class User(Base): # pylint: disable=too-few-public-methods
     """
     Model representing a user in the system.
 
