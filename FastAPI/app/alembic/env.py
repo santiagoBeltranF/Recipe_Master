@@ -1,15 +1,3 @@
-
-You can run the migration commands directly from the terminal with the following:
-
-docker-compose exec fastapi alembic revision --autogenerate -m "first_migrations"
-docker-compose exec fastapi alembic upgrade head
-
-delete the alembic to run it on your computer:
-
-alembic init alembic 
-
-copy this into the env.py:
-
 """
 This module configures Alembic to handle database migrations.
 
